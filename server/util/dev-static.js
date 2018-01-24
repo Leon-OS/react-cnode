@@ -3,6 +3,7 @@
  */
 const path = require('path');
 const axios = require('axios');
+const proxy = require('http-proxy-middleware');
 const webpack = require('webpack');
 const MemoryFs = require('memory-fs');
 const ReactDomServer = require('react-dom/server');
@@ -38,11 +39,14 @@ serverComplier.watch({}, (err, status) => {
 	const bundle = mfs.readFileSync(bundlePath, 'utf-8');
 	const m = new Module();
 	m._compile(bundle, 'server-entry.js'); // 动态编译，指定文件名-> 无法在缓存中读取
-	serverBundle = m.default;
+	serverBundle = m.exports.default; // exports==> network-localhost <div>为空
 });
 
 module.exports = function (app) {
 
+	app.use('/public', proxy({
+		target: 'http://localhost:8888'
+	}));
 	app.get('*', function (req, res) {
 		getTemplate().then(template => {
 			const content = ReactDomServer.renderToString(serverBundle);
