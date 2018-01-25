@@ -10,7 +10,9 @@
     "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
     "dev:server": "cross-env NODE_ENV=development node server/server.js",
     "clear": "rimraf dist",
-    "build": "yarn clear && yarn build:client && yarn build:server"
+    "build": "yarn clear && yarn build:client && yarn build:server",
+    "lint": "eslint --ext .js --ext .jsx client/",
+    "precommit": "yarn lint"
   },
   "author": "Maktub",
   "license": "ISC",
@@ -29,7 +31,6 @@
     "babel-preset-es2015-loose": "^8.0.0",
     "babel-preset-react": "^6.24.1",
     "cross-env": "^5.1.3",
-    "react-hot-loader": "^3.1.3",
     "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-standard": "^11.0.0-beta.0",
@@ -42,7 +43,9 @@
     "eslint-plugin-standard": "^3.0.1",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.4",
+    "husky": "^0.14.3",
     "memory-fs": "^0.4.1",
+    "react-hot-loader": "^3.1.3",
     "rimraf": "^2.6.2",
     "webpack-dev-server": "^2.11.0"
   }
