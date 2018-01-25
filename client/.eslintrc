@@ -1,0 +1,24 @@
+{
+  "parser": "babel-eslint", // 默认有解析器，用babel编译，就用babel-eslint
+  "env": {
+    "browser": true, // 否则 window的环境变量是undefine
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "extends": "airbnb",
+  "rules": {
+    "semi": [0],
+    // 空格2个
+    "indent": ["error", 2],
+    // React Native has JSX in JS files
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    // React Native includes images via require("../images/example.png")
+    "global-require": 0
+  },
+  // jsx相关插件
+  "plugins": ["react", "jsx-a11y", "import"]
+}
