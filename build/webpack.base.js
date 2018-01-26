@@ -21,7 +21,8 @@ module.exports = {
       },
       {
         test: /.jsx$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        exclude: path.join(__dirname, '../node_modules')
       },
       {
         test: /.js$/,
@@ -29,6 +30,8 @@ module.exports = {
         exclude: path.join(__dirname, '../node_modules')
       }
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   }
 }
-
