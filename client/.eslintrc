@@ -20,7 +20,8 @@
     // React Native has JSX in JS files
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     // React Native includes images via require("../images/example.png")
-    "global-require": 0
+    "global-require": 0,
+    "jsx-a11y/anchor-is-valid" : [0]
   },
   // jsx相关插件
   "plugins": ["react", "jsx-a11y", "import"]
