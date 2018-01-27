@@ -5,6 +5,8 @@
 const express = require('express')
 const favicon = require('serve-favicon')
 const ReactSSR = require('react-dom/server')
+const bodyParser = require('body-parser')
+const session = require('express-session')
 const fs = require('fs')
 const path = require('path')
 
@@ -12,7 +14,22 @@ const isDev = process.env.NODE_ENV === 'development'
 
 const app = express()
 
+app.use(bodyParser.json())
+// parsing the URL-encoded data with the querystring library (when false)
+app.use(bodyParser.urlencoded({extended: false}))
+
+app.use(session({
+  maxAge: 10 * 60 * 1000,
+  name: 'tid',
+  resave: false, // 每次请求是否要生成cookieID
+  saveUninitialized: false,
+  secret: 'react cnode js' // 加密cookie
+}))
+
 app.use(favicon(path.join(__dirname, '../favicon.ico')))
+
+app.use('/api/user', require('./util/user-login'))
+app.use('/api', require('./util/proxy'))
 
 if (!isDev) {
   const serverEntry = require('../dist/server-entry').default
