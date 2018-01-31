@@ -10,6 +10,7 @@ const ejs = require('ejs')
 const serialize = require('serialize-javascript')
 const asyncBootstrap = require('react-async-bootstrapper').default
 const ReactDomServer = require('react-dom/server')
+const Helmet = require('react-helmet').default
 
 const serverConfig = require('../../build/webpack.config.server')
 
@@ -27,6 +28,7 @@ const getTemplate = () => {
 const NativeModule = require('module')
 const vm = require('vm')
 
+// `(funtion(exports, require, module, __filename, __dirname){...bundle code}`
 const getModuleFromString = (bundle, filename) => {
   const m = { exports: {} }
   const wrapper = NativeModule.wrap(bundle)
@@ -86,15 +88,19 @@ module.exports = function (app) {
           res.end()
           return
         }
+        const helmet = Helmet.rewind()
         const state = getStoreState(stores)
         const content = ReactDomServer.renderToString(app)
 
         const html = ejs.render(template, {
           appString: content,
-          initialState: serialize(state)
+          initialState: serialize(state),
+          meta: helmet.meta.toString(),
+          title: helmet.title.toString(),
+          style: helmet.style.toString(),
+          link: helmet.link.toString()
         })
         res.send(html)
-        // res.send(template.replace('<!--app-->', content))
       })
     })
   })
