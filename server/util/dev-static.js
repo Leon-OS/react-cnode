@@ -6,6 +6,7 @@ const axios = require('axios')
 const proxy = require('http-proxy-middleware')
 const webpack = require('webpack')
 const MemoryFs = require('memory-fs')
+const asyncBootstrap = require('react-async-bootstrapper').default
 const ReactDomServer = require('react-dom/server')
 
 const serverConfig = require('../../build/webpack.config.server')
@@ -49,15 +50,23 @@ module.exports = function (app) {
   }))
   app.get('*', function (req, res) {
     getTemplate().then(template => {
+      const stores = createStoreMap()
       const routerContext = {}
-      const app = serverBundle(createStoreMap(), routerContext, req.url)
-      const content = ReactDomServer.renderToString(app)
-      if (routerContext.url) {
-        res.status(302).setHeader('Location', routerContext.url)
-        res.end()
-        return
-      }
-      res.send(template.replace('<!--app-->', content))
+      const app = serverBundle(stores, routerContext, req.url)
+
+      // 异步加载数据，在渲染前
+      // new: 源代码数据 count=3, 渲染 count=0
+      asyncBootstrap(app).then(() => {
+        if (routerContext.url) {
+          res.status(302).setHeader('Location', routerContext.url)
+          res.end()
+          return
+        }
+        console.log(stores)
+        console.log(stores.appState.count)
+        const content = ReactDomServer.renderToString(app)
+        res.send(template.replace('<!--app-->', content))
+      })
     })
   })
 }
