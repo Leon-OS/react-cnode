@@ -25,7 +25,7 @@ const Module = module.constructor
 const mfs = new MemoryFs()
 const serverComplier = webpack(serverConfig)
 serverComplier.outputFileSystem = mfs
-let serverBundle
+let serverBundle, createStoreMap
 serverComplier.watch({}, (err, status) => {
   if (err) throw err
   status = status.toJson()
@@ -40,6 +40,7 @@ serverComplier.watch({}, (err, status) => {
   const m = new Module()
   m._compile(bundle, 'server-entry.js') // 动态编译，指定文件名-> 无法在缓存中读取
   serverBundle = m.exports.default // exports==> network-localhost <div>为空
+  createStoreMap = m.exports.createStoreMap
 })
 
 module.exports = function (app) {
@@ -48,7 +49,9 @@ module.exports = function (app) {
   }))
   app.get('*', function (req, res) {
     getTemplate().then(template => {
-      const content = ReactDomServer.renderToString(serverBundle)
+      const routerContext = {}
+      const app = serverBundle(createStoreMap(), routerContext, req.url)
+      const content = ReactDomServer.renderToString(app)
       res.send(template.replace('<!--app-->', content))
     })
   })
