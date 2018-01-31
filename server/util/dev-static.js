@@ -6,6 +6,8 @@ const axios = require('axios')
 const proxy = require('http-proxy-middleware')
 const webpack = require('webpack')
 const MemoryFs = require('memory-fs')
+const ejs = require('ejs')
+const serialize = require('serialize-javascript')
 const asyncBootstrap = require('react-async-bootstrapper').default
 const ReactDomServer = require('react-dom/server')
 
@@ -13,7 +15,7 @@ const serverConfig = require('../../build/webpack.config.server')
 
 const getTemplate = () => {
   return new Promise((resolve, reject) => {
-    axios.get('http://localhost:8888/public/index.html')
+    axios.get('http://localhost:8888/public/server.ejs')
       .then(res => {
         resolve(res.data)
       })
@@ -44,6 +46,13 @@ serverComplier.watch({}, (err, status) => {
   createStoreMap = m.exports.createStoreMap
 })
 
+const getStoreState = (stores) => {
+  return Object.keys(stores).reduce((result, storeName) => {
+    result[storeName] = stores[storeName].toJson()
+    return result
+  }, {})
+}
+
 module.exports = function (app) {
   app.use('/public', proxy({
     target: 'http://localhost:8888'
@@ -55,17 +64,21 @@ module.exports = function (app) {
       const app = serverBundle(stores, routerContext, req.url)
 
       // 异步加载数据，在渲染前
-      // new: 源代码数据 count=3, 渲染 count=0
       asyncBootstrap(app).then(() => {
         if (routerContext.url) {
           res.status(302).setHeader('Location', routerContext.url)
           res.end()
           return
         }
-        console.log(stores)
-        console.log(stores.appState.count)
+        const state = getStoreState(stores)
         const content = ReactDomServer.renderToString(app)
-        res.send(template.replace('<!--app-->', content))
+
+        const html = ejs.render(template, {
+          appString: content,
+          initialState: serialize(state)
+        })
+        res.send(html)
+        // res.send(template.replace('<!--app-->', content))
       })
     })
   })
