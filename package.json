@@ -12,7 +12,8 @@
     "clear": "rimraf dist",
     "build": "yarn clear && yarn build:client && yarn build:server",
     "lint": "eslint --ext .js --ext .jsx client/",
-    "precommit": "yarn lint"
+    "precommit": "yarn lint",
+    "start": "cross-env NODE_ENV=prodution node server/server.js"
   },
   "author": "Maktub",
   "license": "ISC",
