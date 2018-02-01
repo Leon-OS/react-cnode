@@ -17,7 +17,6 @@ const getStoreState = (stores) => {
 
 module.exports = (bundle, template, req, res) => {
   return new Promise((resolve, reject) => {
-
     const createStoreMap = bundle.createStoreMap
     const createApp = bundle.default
     const stores = createStoreMap()
