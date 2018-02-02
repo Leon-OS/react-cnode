@@ -6,7 +6,8 @@ import {
 } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import Button from 'material-ui/Button'
+// import Button from 'material-ui/Button'
+import Tabs, { Tab } from 'material-ui/Tabs'
 import Container from '../layout/container'
 import AppState from '../../store/app-state'
 
@@ -14,11 +15,20 @@ import AppState from '../../store/app-state'
 export default class TopicList extends React.Component {
   constructor() {
     super()
-    this.handleName = this.handleName.bind(this)
+    this.state = {
+      tabIndex: 0,
+    }
+    this.onTabclick = this.onTabclick.bind(this)
   }
 
   componentDidMount() {
     // do something here
+  }
+
+  onTabclick(e, index) {
+    this.setState({
+      tabIndex: index,
+    })
   }
 
   asyncBootstrap() {
@@ -30,20 +40,22 @@ export default class TopicList extends React.Component {
     })
   }
 
-  handleName(event) {
-    this.props.appState.changeName(event.target.value)
-  }
-
   render() {
+    const { tabIndex } = this.state
     return (
       <Container>
         <Helmet>
           <title>This is topic list</title>
           <meta name="description" content="This is description" />
         </Helmet>
-        <Button raised color="primary"> This is a button </Button>
-        <input type="text" onChange={this.handleName} />
-        <div>{this.props.appState.msg}</div>
+        <Tabs value={tabIndex} onChange={this.onTabclick}>
+          <Tab label="全部" />
+          <Tab label="分享" />
+          <Tab label="工作" />
+          <Tab label="问答" />
+          <Tab label="精品" />
+          <Tab label="测试" />
+        </Tabs>
       </Container>
     )
   }
