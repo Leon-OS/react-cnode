@@ -10,6 +10,7 @@ import Helmet from 'react-helmet'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import Container from '../layout/container'
 import AppState from '../../store/app-state'
+import TopicListItem from './list-item'
 
 @inject('appState') @observer
 export default class TopicList extends React.Component {
@@ -19,6 +20,7 @@ export default class TopicList extends React.Component {
       tabIndex: 0,
     }
     this.onTabclick = this.onTabclick.bind(this)
+    this.onTopicItemClick = this.onTopicItemClick.bind(this)
   }
 
   componentDidMount() {
@@ -31,6 +33,12 @@ export default class TopicList extends React.Component {
     })
   }
 
+  /* eslint-disable */
+  onTopicItemClick() {
+
+  }
+  /* eslint-enable */
+
   asyncBootstrap() {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -42,6 +50,14 @@ export default class TopicList extends React.Component {
 
   render() {
     const { tabIndex } = this.state
+    const topic = {
+      tab: 'ask',
+      reply_count: 3,
+      visit_count: 83,
+      create_at: '2018-02-02T02:13:54.184Z',
+      title: 'flv.js 如何做直播功能',
+      username: 'Maktub',
+    }
     return (
       <Container>
         <Helmet>
@@ -56,6 +72,7 @@ export default class TopicList extends React.Component {
           <Tab label="精品" />
           <Tab label="测试" />
         </Tabs>
+        <TopicListItem onClick={this.onTopicItemClick} topic={topic} />
       </Container>
     )
   }
