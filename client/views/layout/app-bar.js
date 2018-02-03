@@ -52,14 +52,14 @@ class MainAppBar extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onIconClicked={this.onHomeIconClick}>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.onHomeIconClick}>
               <HomeIcon />
             </IconButton>
             <Typography type="title" color="inherit" className={classes.flex} >
               JNode
             </Typography>
-            <Button raised color="accent" onClick={this.createButtonClick}>新建话题</Button>
-            <Button color="contrast" onClick={this.loginButtonClick}>登陆</Button>
+            <Button raised onClick={this.createButtonClick}>新建话题</Button>
+            <Button onClick={this.loginButtonClick}>登陆</Button>
           </Toolbar>
         </AppBar>
       </div>
