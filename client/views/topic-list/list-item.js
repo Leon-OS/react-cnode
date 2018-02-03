@@ -5,7 +5,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ListItem, ListItemAvatar, ListItemText } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
-import ImageIcon from 'material-ui-icons/Image';
 import { withStyles } from 'material-ui/styles'
 import { topicPrimaryStyle, topicSecondaryStyle } from './style'
 
@@ -17,26 +16,24 @@ const Primary = ({ classes, topic }) => (
 )
 
 const Secondary = ({ classes, topic }) => (
-  <div className={classes.root}>
-    <span className={classes.userName}>{topic.username}</span>
+  <span className={classes.root}>
+    <span className={classes.userName}>{topic.author.loginname}</span>
     <span className={classes.count}>
       <span className={classes.accentColor}>{topic.reply_count}</span>
       <span>/</span>
       <span>{topic.visit_count}</span>
     </span>
     <span>创建时间：{topic.create_at}</span>
-  </div>
+  </span>
 )
 
 const TopicPrimaryStyle = withStyles(topicPrimaryStyle)(Primary)
 const TopicSecondaryStyle = withStyles(topicSecondaryStyle)(Secondary)
 
 const TopicListItem = ({ onClick, topic }) => (
-  <ListItem button onclick={onClick}>
+  <ListItem button onClick={onClick}>
     <ListItemAvatar>
-      <Avatar src={topic.image}>
-        <ImageIcon />
-      </Avatar>
+      <Avatar src={topic.author.avatar_url} />
     </ListItemAvatar>
     <ListItemText
       primary={<TopicPrimaryStyle topic={topic} />}
