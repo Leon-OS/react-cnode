@@ -48,11 +48,11 @@ export default class TopicList extends React.Component {
     })
   }
 
-  /* eslint-disable */
-  onTopicItemClick() {
-
+  onTopicItemClick(topic) {
+    this.props.history.push({
+      pathname: `/detail/${topic.id}`,
+    })
   }
-  /* eslint-enable */
 
   getTab(search) {
     const tabQ = search || this.props.location.search
@@ -88,7 +88,7 @@ export default class TopicList extends React.Component {
             topics.map(topic => (
               <TopicListItem
                 key={topic.id}
-                onClick={this.onTopicItemClick}
+                onClick={() => this.onTopicItemClick(topic)}
                 topic={topic}
               />))
           }

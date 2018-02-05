@@ -7,11 +7,14 @@ import axios from 'axios'
 const baseUrl = process.env.API_BASE || ''
 
 const parseUrl = (url, params) => {
+  if (!params) {
+    return `${baseUrl}/api${url}`
+  }
   const query = Object.keys(params).reduce((result, key) => {
     result += `${key}=${params[key]}&`
     return result
   }, '')
-  return `${baseUrl}/api/${url}?${query.substr(0, query.length - 1)}`
+  return `${baseUrl}/api${url}?${query.substr(0, query.length - 1)}`
 }
 
 export const get = (url, params) => new Promise((resolve, reject) => {
