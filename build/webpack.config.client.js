@@ -37,7 +37,7 @@ if (isDev) {
   }
   config.devServer = {
     host: '0.0.0.0',
-    port: '8888',
+    port: '8000',
     // contentBase: path.join(__dirname, '../dist'),
     hot: true,
     publicPath: '/public/',

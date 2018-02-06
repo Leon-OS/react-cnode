@@ -6,10 +6,15 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import TextFiled from 'material-ui/TextField'
 import Button from 'material-ui/Button'
-
+import { inject, observer } from 'mobx-react'
+import { AppState } from '../../store/store'
 import UserWrapper from './user'
 import loginStyle from './styles/login-style'
 
+@inject(stores => ({
+  appState: stores.appState,
+}))
+@observer
 class Login extends Component {
   constructor() {
     super()
@@ -22,7 +27,9 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    // do sometion
+    if (this.props.appState.user.isLogin) {
+      this.props.history.replace('/user/info')
+    }
   }
 
   handleLogin() {
@@ -35,6 +42,13 @@ class Login extends Component {
     this.setState({
       helpText: '',
     })
+    this.props.appState.login(this.state.accesstoken)
+      .then(() => {
+        this.props.history.replace('/user/info')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   handleInput(event) {
@@ -68,8 +82,13 @@ class Login extends Component {
   }
 }
 
+Login.wrappedComponent.propTypes = {
+  appState: PropTypes.instanceOf(AppState).isRequired,
+}
+
 Login.propTypes = {
   classes: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 }
 
 export default withStyles(loginStyle)(Login)

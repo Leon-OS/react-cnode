@@ -2,7 +2,7 @@
  * Created by Maktub on 2018/2/6
  */
 import React, { Component } from 'react'
-import User from './user'
+import UserWrap from './user'
 
 export default class UserInfo extends Component {
   componentDidMount() {
@@ -11,9 +11,11 @@ export default class UserInfo extends Component {
 
   render() {
     return (
-      <div>
-        <User />
-      </div>
+      <UserWrap>
+        <div>
+          user
+        </div>
+      </UserWrap>
     )
   }
 }

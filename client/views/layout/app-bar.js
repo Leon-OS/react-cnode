@@ -4,6 +4,8 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
+import { inject, observer } from 'mobx-react'
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
@@ -11,6 +13,8 @@ import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
 import IconButton from 'material-ui/IconButton'
 import HomeIcon from 'material-ui-icons/Home'
+
+import { AppState } from '../../store/store'
 
 const styles = {
   root: {
@@ -25,6 +29,9 @@ const styles = {
   },
 }
 
+@inject(stores => ({
+  appState: stores.appState,
+})) @observer @withRouter
 class MainAppBar extends Component {
   constructor() {
     super()
@@ -33,21 +40,27 @@ class MainAppBar extends Component {
     this.onHomeIconClick = this.onHomeIconClick.bind(this)
   }
 
-  /* eslint-disable*/
+
   onHomeIconClick() {
-    // do
+    this.props.history.push('/list?tab=all')
   }
 
   loginButtonClick() {
-    // do
+    if (this.props.appState.user.isLogin) {
+      this.props.history.push('/user/info')
+    } else {
+      this.props.history.push('/user/login')
+    }
   }
 
+  /* eslint-disable */
   createButtonClick() {
     // do
   }
+  /* eslint-enable */
 
   render() {
-    const { classes } = this.props
+    const { classes, appState: { user } } = this.props
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -59,7 +72,7 @@ class MainAppBar extends Component {
               JNode
             </Typography>
             <Button raised onClick={this.createButtonClick}>新建话题</Button>
-            <Button onClick={this.loginButtonClick}>登陆</Button>
+            <Button onClick={this.loginButtonClick}>{user.isLogin ? user.info.loginname : '登录'}</Button>
           </Toolbar>
         </AppBar>
       </div>
@@ -70,6 +83,11 @@ class MainAppBar extends Component {
 
 MainAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  history: PropTypes.object,
 };
+
+MainAppBar.wrappedComponent.propTypes = {
+  appState: PropTypes.instanceOf(AppState).isRequired,
+}
 
 export default withStyles(styles)(MainAppBar);
