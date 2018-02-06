@@ -22,11 +22,10 @@ module.exports = function (req, res, next) {
   const query = Object.assign({}, req.query)
   query.accesstoken = (needAccessToken && req.method === 'GET') ? user.accessToken : ''
   if (query.needAccessToken) delete query.needAccessToken
-
   axios(`${baseUrl}${path}`, {
     method: req.method,
     params: query,
-    data: queryString.stringify(Object.assign({}, req.body, {
+    data: queryString.stringify(req.body.accesstoken ? req.body : Object.assign({}, req.body, {
       accesstoken: (needAccessToken && req.method === 'POST') ? user.accessToken : ''
     })),
     headers: {
