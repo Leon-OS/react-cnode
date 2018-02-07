@@ -29,9 +29,11 @@ const styles = {
   },
 }
 
+@withRouter
 @inject(stores => ({
   appState: stores.appState,
-})) @observer @withRouter
+}))
+@observer
 class MainAppBar extends Component {
   constructor() {
     super()
@@ -60,7 +62,8 @@ class MainAppBar extends Component {
   /* eslint-enable */
 
   render() {
-    const { classes, appState: { user } } = this.props
+    const { classes, appState } = this.props
+    const { info, isLogin } = appState.user
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -72,7 +75,7 @@ class MainAppBar extends Component {
               JNode
             </Typography>
             <Button raised onClick={this.createButtonClick}>新建话题</Button>
-            <Button onClick={this.loginButtonClick}>{user.isLogin ? user.info.loginname : '登录'}</Button>
+            <Button onClick={this.loginButtonClick}>{isLogin ? info.loginname : '登录'}</Button>
           </Toolbar>
         </AppBar>
       </div>
@@ -90,4 +93,4 @@ MainAppBar.wrappedComponent.propTypes = {
   appState: PropTypes.instanceOf(AppState).isRequired,
 }
 
-export default withStyles(styles)(MainAppBar);
+export default withStyles(styles)(MainAppBar)

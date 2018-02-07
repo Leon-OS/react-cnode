@@ -28,7 +28,6 @@ export const get = (url, params) => new Promise((resolve, reject) => {
 })
 
 export const post = (url, params, datas) => new Promise((resolve, reject) => {
-  console.log(parseUrl(url, params))
   axios.post(parseUrl(url, params), datas)
     .then((resp) => {
       const { data } = resp

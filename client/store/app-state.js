@@ -5,6 +5,7 @@ import {
   observable,
   action,
   extendObservable,
+  transaction,
 } from 'mobx'
 import { post } from '../util/http'
 
@@ -22,8 +23,10 @@ export default class AppState {
     return new Promise((resolve, reject) => {
       post('/accesstoken', {}, { accesstoken }).then((resp) => {
         if (resp.success) {
-          this.user.isLogin = true
-          this.user.info = resp
+          transaction(() => {
+            this.user.isLogin = true
+            this.user.info = resp
+          })
           resolve(resp)
         } else {
           reject()

@@ -46,9 +46,6 @@ class Login extends Component {
       .then(() => {
         this.props.history.replace('/user/info')
       })
-      .catch((err) => {
-        console.log(err)
-      })
   }
 
   handleInput(event) {
