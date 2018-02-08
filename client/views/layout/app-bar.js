@@ -22,10 +22,12 @@ const styles = {
   },
   flex: {
     flex: 1,
+    color: '#fff',
   },
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
+    color: '#fff',
   },
 }
 
@@ -75,7 +77,7 @@ class MainAppBar extends Component {
               JNode
             </Typography>
             <Button raised onClick={this.createButtonClick}>新建话题</Button>
-            <Button onClick={this.loginButtonClick}>{isLogin ? info.loginname : '登录'}</Button>
+            <Button onClick={this.loginButtonClick} style={{ color: '#fff' }}>{isLogin ? info.loginname : '登录'}</Button>
           </Toolbar>
         </AppBar>
       </div>
