@@ -23,6 +23,11 @@ export default class AppState {
       syncing: false,
       list: [],
     },
+    details: {
+      syncing: false,
+      topics: [],
+      replies: [],
+    },
   }
 
   @action login(accesstoken) {
@@ -57,6 +62,29 @@ export default class AppState {
         })
         .catch((err) => {
           this.user.collection.syncing = false
+          reject(err)
+        })
+    })
+  }
+
+  @action getUserInfo() {
+    this.user.details.syncing = true
+    this.user.details.topics = []
+    this.user.details.replies = []
+    return new Promise((resolve, reject) => {
+      get(`/user/${this.user.info.loginname}`)
+        .then((resp) => {
+          if (resp.success) {
+            this.user.details.topics = resp.data.recent_topics
+            this.user.details.replies = resp.data.recent_replies
+            resolve(resp)
+          } else {
+            reject()
+          }
+          this.user.details.syncing = false
+        })
+        .catch((err) => {
+          this.user.details.syncing = false
           reject(err)
         })
     })
